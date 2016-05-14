@@ -14,11 +14,15 @@ class Team(db.Model):
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    team_id = db.Column(db.String(120))
+    team_id = db.Column(db.Integer)
     patient_id = db.Column(db.String(120))
     urgency = db.Column(db.Integer)
-    comment = db.Column(db.String(120))
+    creator_comment = db.Column(db.String(120))
+    doctor_comment = db.Column(db.String(120))
+    bed = db.Column(db.String(120))
+    ward = db.Column(db.String(120))
     location = db.Column(db.String(120))
+    creator_id = db.Column(db.String(120))
     creator_name = db.Column(db.String(120))
     acknowledged = db.Column(db.DateTime)
     done = db.Column(db.DateTime)
@@ -31,8 +35,6 @@ class Job(db.Model):
         self.comment = comment
         self.location = location
         self.creator_name = creator_name
-        self.acknowledged = datetime.now()
-        self.done = datetime.now()
         self.created_at = datetime.now()
 
     def __repr__(self):
@@ -43,13 +45,30 @@ class Audit(db.Model):
     audit_id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.Integer)
     action = db.Column(db.String(120))
+    old_val = db.Column(db.String(120))
+    new_val = db.Column(db.String(120))
     audit_time = db.Column(db.DateTime)
-    user_id = db.Column(db.Integer)
+    creator_id = db.Column(db.Integer)
+    creator_name = db.Column(db.String(120))
 
-    def __init__(self, action, user_id):
+    def __init__(self, job_id, action, old_val, new_val, creator_id, creator_name):
+        self.job_id = job_id
         self.action = action
-        self.user_id = user_id
+        self.old_val = old_val
+        self.new_val = new_val
+        self.creator_id = creator_id
+        self.creator_name = creator_name
 
     def __repr__(self):
         return '<Audit %r>' % self.job_id
 
+
+class Doctor(db.Model):
+    doctor_id = db.Column(db.Integer, primary_key=True)
+    doctor_name = db.Column(db.String(120))
+
+    def __init__(self, doctor_name):
+        self.doctor_name = doctor_name
+
+    def __repr__(self):
+        return '<Doctor %r>' % self.doctor_id

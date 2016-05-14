@@ -16,6 +16,18 @@ def index():
     return 'Banish The Beep API'
 
 
+@app.route('/create_all')
+def create_tables():
+    db.create_all()
+    return jsonify({ 'success' : True })
+
+
+@app.route('/drop_all')
+def drop_tables():
+    db.drop_all()
+    return jsonify({ 'success' : True })
+
+
 @app.route('/job/create', methods=['POST'])
 def create():
     # TODO VALIDATION
