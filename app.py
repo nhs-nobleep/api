@@ -34,11 +34,15 @@ def create():
     team_id = request.form['team_id']
     patient_id = request.form['patient_id']
     urgency = request.form['urgency']
-    comment = request.form['comment']
+    creator_comment = request.form['creator_comment']
+    doctor_comment = request.form['doctor_comment']
+    bed = request.form['bed']
+    ward = request.form['ward']
     location = request.form['location']
     creator_name = request.form['creator_name']
 
-    job = Job(team_id, patient_id, urgency, comment, location, creator_name)
+    job = Job(team_id, patient_id, urgency, creator_comment, doctor_comment, bed, ward, location, creator_name)
+
     db.session.add(job)
     db.session.commit()
 
@@ -47,8 +51,15 @@ def create():
 
 @app.route('/job/read')
 def read_all():
-    jobs = Job.query.all()
-    return jsonify({ 'success' : True })
+    rows = db.session.query(Team, Job, Doctor).filter(Job.done is not None).all()
+
+    json_jobs = []
+    for job in rows:
+        json_jobs.append({
+            'job_id': job.id
+            })
+
+    return jsonify({ 'jobs' : json_jobs })
 
 
 @app.route('/job/read/<team_id>')

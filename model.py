@@ -4,6 +4,7 @@ from datetime import datetime
 class Team(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     team_name = db.Column(db.String(120))
+    jobs = db.relationship('Job', backref='team', lazy='dynamic')
 
     def __init__(self, team_name):
         self.team_name = team_name
@@ -14,7 +15,7 @@ class Team(db.Model):
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    team_id = db.Column(db.Integer)
+    team_id = db.Column(db.Integer, db.ForeignKey('team.team_id'))
     patient_id = db.Column(db.String(120))
     urgency = db.Column(db.Integer)
     creator_comment = db.Column(db.String(120))
@@ -27,12 +28,16 @@ class Job(db.Model):
     acknowledged = db.Column(db.DateTime)
     done = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime)
+    audits = db.relationship('Audit', backref='job', lazy='dynamic')
 
-    def __init__(self, team_id, patient_id, urgency, comment, location, creator_name):
+    def __init__(self, team_id, patient_id, urgency, creator_comment, doctor_comment, bed, ward, location, creator_name):
         self.team_id = team_id
         self.patient_id = patient_id
         self.urgency = urgency
-        self.comment = comment
+        self.creator_comment = creator_comment
+        self.doctor_comment = doctor_comment
+        self.bed = bed
+        self.ward = ward
         self.location = location
         self.creator_name = creator_name
         self.created_at = datetime.now()
@@ -43,7 +48,7 @@ class Job(db.Model):
 
 class Audit(db.Model):
     audit_id = db.Column(db.Integer, primary_key=True)
-    job_id = db.Column(db.Integer)
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     action = db.Column(db.String(120))
     old_val = db.Column(db.String(120))
     new_val = db.Column(db.String(120))
