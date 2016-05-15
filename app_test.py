@@ -97,8 +97,9 @@ class JobTestCase(unittest.TestCase):
         }, follow_redirects=True)
 
         self.assertEqual(up.mimetype, 'application/json')
+        self.assertEqual(json.loads(up.data.decode('utf-8'))['success'], True)
 
-    def test_update(self):
+    def test_update_team_id(self):
         self.app.post('/job/create', data={
             'team_id': 10,
             'patient_id': 'patient_id',
@@ -115,12 +116,38 @@ class JobTestCase(unittest.TestCase):
             'team_id': 20
         }, follow_redirects=True)
 
-        result = self.app.get('/job/read')
+        self.assertEqual(json.loads(up.data.decode('utf-8'))['success'], True)
 
+        result = self.app.get('/job/read')
         data = json.loads(result.data.decode('utf-8'))
         self.assertEqual(data['jobs'][0]['id'], 1)
         self.assertEqual(data['jobs'][0]['team_id'], 20)
+
+    def test_update_done(self):
+        self.app.post('/job/create', data={
+            'team_id': 10,
+            'patient_id': 'patient_id',
+            'urgency': 3,
+            'creator_comment': 'creator_comment',
+            'doctor_comment': 'doctor_comment',
+            'bed': 'bed',
+            'ward': 'ward',
+            'location': 'location',
+            'creator_name': 'creator_name'
+        }, follow_redirects=True)
+
+        up = self.app.post('/job/update/1', data={
+            'done': 'Sun May 15 2016 12:17:36 GMT+0100 (BST)'
+        }, follow_redirects=True)
+
         self.assertEqual(json.loads(up.data.decode('utf-8'))['success'], True)
+
+        result = self.app.get('/job/read')
+        data = json.loads(result.data.decode('utf-8'))
+        print(data)
+        # self.assertEqual(data['jobs'][0]['id'], 1)
+        # print(data['jobs'][0]['done'])
+        # self.assertEqual(type(data['jobs'][0]['done']), datetime)
 
     def test_insert_urgency_4(self):
         rv = self.app.post('/job/create', data={
