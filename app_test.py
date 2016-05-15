@@ -64,8 +64,21 @@ class JobTestCase(unittest.TestCase):
         self.assertEqual(rv.mimetype, 'application/json')
 
     def test_read_team_id(self):
-        print('TO DO')
-        assert(False)
+        rv = self.app.post('/job/create', data={
+            'team_id': 10,
+            'patient_id': 'patient_id',
+            'urgency': 3,
+            'creator_comment': 'creator_comment',
+            'doctor_comment': 'doctor_comment',
+            'bed': 'bed',
+            'ward': 'ward',
+            'location': 'location',
+            'creator_name': 'creator_name'
+        }, follow_redirects=True)
+
+        result = self.app.get('/job/read/10')
+        data = json.loads(result.data.decode('utf-8'))
+        assert(data['jobs'][0]['team_id'] is 10)
 
     def test_update_response(self):
         rv = self.app.post('/job/create', data={
@@ -83,7 +96,6 @@ class JobTestCase(unittest.TestCase):
         up = self.app.post('/job/update/1', data={
             'team_id': 20
         }, follow_redirects=True)
-        print(up)
 
         self.assertEqual(up.mimetype, 'application/json')
 
@@ -104,7 +116,7 @@ class JobTestCase(unittest.TestCase):
             'team_id': 20
         }, follow_redirects=True)
 
-        result = self.app.get('/job/read/1')
+        result = self.app.get('/job/read')
 
         data = json.loads(result.data.decode('utf-8'))
         assert(data['jobs'][0]['id'] is 1)
