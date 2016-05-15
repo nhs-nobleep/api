@@ -49,7 +49,7 @@ def create():
     db.session.add(job)
     db.session.commit()
 
-    return jsonify({ 'success' : True })
+    return redirect("http://hat-970.getforge.io/list", code=200)
 
 
 @app.route('/job/read')
