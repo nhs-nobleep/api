@@ -35,10 +35,10 @@ def create():
     patient_id = request.form['patient_id']
     urgency = request.form['urgency']
     creator_comment = request.form['creator_comment']
-    doctor_comment = request.form['doctor_comment']
+    doctor_comment = request.form['doctor_comment'] if 'doctor_comment' in request.form else ''
     bed = request.form['bed']
     ward = request.form['ward']
-    location = request.form['location']
+    location = request.form['location'] if 'location' in request.form else ''
     creator_name = request.form['creator_name']
 
     job = Job(team_id, patient_id, urgency, creator_comment, doctor_comment, bed, ward, location, creator_name)
