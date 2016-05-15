@@ -72,8 +72,8 @@ __location__
 
 __creator_name__
 
-# ```POST /job/update```
-_Updates a job_
+# ```POST /job/update/<id>```
+_Updates the job with id_
 
 __team_id__ _optional_
 
