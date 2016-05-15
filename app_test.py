@@ -144,10 +144,31 @@ class JobTestCase(unittest.TestCase):
 
         result = self.app.get('/job/read')
         data = json.loads(result.data.decode('utf-8'))
-        print(data)
-        # self.assertEqual(data['jobs'][0]['id'], 1)
-        # print(data['jobs'][0]['done'])
-        # self.assertEqual(type(data['jobs'][0]['done']), datetime)
+        self.assertEqual(data, {'jobs': []})
+
+    def test_update_acknowledged(self):
+        self.app.post('/job/create', data={
+            'team_id': 10,
+            'patient_id': 'patient_id',
+            'urgency': 3,
+            'creator_comment': 'creator_comment',
+            'doctor_comment': 'doctor_comment',
+            'bed': 'bed',
+            'ward': 'ward',
+            'location': 'location',
+            'creator_name': 'creator_name'
+        }, follow_redirects=True)
+
+        up = self.app.post('/job/update/1', data={
+            'acknowledged': 'Sun May 15 2016 12:17:36 GMT+0100 (BST)'
+        }, follow_redirects=True)
+
+        self.assertEqual(json.loads(up.data.decode('utf-8'))['success'], True)
+
+        result = self.app.get('/job/read')
+        data = json.loads(result.data.decode('utf-8'))
+        self.assertEqual(data['jobs'][0]['id'], 1)
+        self.assertEqual(type(data['jobs'][0]['acknowledged']), str)
 
     def test_insert_urgency_4(self):
         rv = self.app.post('/job/create', data={
