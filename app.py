@@ -2,7 +2,6 @@ import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.cors import CORS
-from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -126,11 +125,11 @@ def update(id):
     if 'location' in request.form:
         job.location = request.form['location']
     if 'creator_name' in request.form:
-        job.creator_name = datetime.now() 
+        job.creator_name = request.form['creator_name']
     if 'acknowledged' in request.form:
         job.acknowledged = datetime.now() 
     if 'done' in request.form:
-        job.done = request.form['done']
+        job.done = datetime.now() 
 
     db.session.add(job)
     db.session.commit()
