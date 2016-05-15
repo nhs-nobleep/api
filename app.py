@@ -126,6 +126,10 @@ def update(id):
         job.location = request.form['location']
     if 'creator_name' in request.form:
         job.creator_name = request.form['creator_name']
+    if 'acknowledged' in request.form:
+        job.acknowledged = request.form['acknowledged']
+    if 'done' in request.form:
+        job.done = request.form['done']
 
     db.session.add(job)
     db.session.commit()
