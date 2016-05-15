@@ -102,7 +102,7 @@ def read(team_id):
     return jsonify({ 'jobs' : json_jobs })
 
 
-@app.route('/job/update/<id>')
+@app.route('/job/update/<id>', methods=['POST'])
 def update(id):
     team_id = request.form['team_id']
     patient_id = request.form['patient_id']
