@@ -104,36 +104,26 @@ def read(team_id):
 
 @app.route('/job/update/<id>', methods=['POST'])
 def update(id):
-    team_id = request.form['team_id']
-    patient_id = request.form['patient_id']
-    urgency = request.form['urgency']
-    creator_comment = request.form['creator_comment']
-    doctor_comment = request.form['doctor_comment']
-    bed = request.form['bed']
-    ward = request.form['ward']
-    location = request.form['location']
-    creator_name = request.form['creator_name']
-
     job = Job.query.get(id)
 
-    if team_id is not None:
-        job.team_id = team_id
-    if patient_id is not None:
-        job.patient_id = patient_id
-    if urgency is not None:
-        job.urgency = urgency
-    if creator_comment is not None:
-        job.creator_comment = creator_comment
-    if doctor_comment is not None:
-        job.doctor_comment = doctor_comment
-    if bed is not None:
-        job.bed = bed
-    if ward is not None:
-        job.ward = ward
-    if location is not None:
-        job.location = location
-    if creator_name is not None:
-        job.creator_name = creator_name
+    if 'team_id' in request.form:
+        job.team_id = request.form['team_id']
+    if 'patient_id' in request.form:
+        job.patient_id = request.form['patient_id']
+    if 'urgency' in request.form:
+        job.urgency = request.form['urgency']
+    if 'creator_comment' in request.form:
+        job.creator_comment = request.form['creator_comment']
+    if 'doctor_comment' in request.form:
+        job.doctor_comment = request.form['doctor_comment']
+    if 'bed' in request.form:
+        job.bed = request.form['bed']
+    if 'ward' in request.form:
+        job.ward = request.form['ward']
+    if 'location' in request.form:
+        job.location = request.form['location']
+    if 'creator_name' in request.form:
+        job.creator_name = request.form['creator_name']
 
     db.session.add(job)
     db.session.commit()
