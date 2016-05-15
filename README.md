@@ -5,8 +5,51 @@
 # ```GET /job/read```
 _Gets all of the jobs_
 
+returns 
+```json
+{
+
+  "jobs": [
+
+    {
+
+      "acknowledged": null,
+
+      "bed": "bed",
+
+      "created_at": "Sat, 14 May 2016 17:56:06 GMT",
+
+      "creator_comment": "creator_comment",
+
+      "creator_id": null,
+
+      "creator_name": "creator_name",
+
+      "doctor_comment": "doctor_comment",
+
+      "done": null,
+
+      "id": 1,
+
+      "location": "location",
+
+      "patient_id": "patient_id",
+
+      "team_id": 1,
+
+      "urgency": 1,
+
+      "ward": "ward"
+
+    }
+  ]
+}
+```
+
 # ```GET /job/read/<team_id>```
 _Gets all the jobs for a team_id_
+
+returns same as above
 
 # ```POST /job/create```
 _Creates a job_
